@@ -1,0 +1,6 @@
+.DS_Store
+.kitchen.local.yml
+.kitchen
+.s3.yml
+Berksfile.lock
+*.iml
