@@ -9,7 +9,7 @@ long_description File.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '1.22.0'
 chef_version '>= 12.0' if respond_to?(:chef_version)
 
-depends 'apt', '< 7.0'
+depends 'apt', '7.0.0'
 depends 'ark', '= 4.0.0'
 depends 'chef_client_updater', '~> 3.6.0' # 3.7 introduces breaking change
 depends 'logrotate', '2.2.1' # 2.2.2 breaks tests for whatever reason

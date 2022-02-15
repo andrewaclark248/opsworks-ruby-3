@@ -1,0 +1,18 @@
+ChefModernize/WindowsZipfileUsage:
+  Enabled: false
+
+Lint/ShadowingOuterLocalVariable:
+  Exclude:
+    - 'libraries/registry_helper.rb'
+
+Lint/UselessAssignment:
+  Exclude:
+    - 'libraries/registry_helper.rb'
+
+Style/ClassVars:
+  Exclude:
+    - 'libraries/registry_helper.rb'
+
+Style/IfInsideElse:
+  Exclude:
+    - 'libraries/powershell_helper.rb'
