@@ -23,4 +23,4 @@ supports 'suse'
 supports 'ubuntu'
 supports 'windows'
 
-depends 'seven_zip', '>= 3.1' # for windows os
+depends 'seven_zip', '2.0.0' # for windows os
