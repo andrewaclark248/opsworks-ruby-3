@@ -6,7 +6,7 @@ description       'Provides a custom resource for installing runtime artifacts i
 version           '4.0.0'
 source_url        'https://github.com/sous-chefs/ark'
 issues_url        'https://github.com/sous-chefs/ark/issues'
-chef_version      '>= 15.3'
+chef_version      '>= 12.0'
 
 supports 'amazon'
 supports 'centos'
