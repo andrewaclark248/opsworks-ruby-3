@@ -20,7 +20,7 @@ depends 'ruby-ng'
 depends 's3_file'
 depends 'seven_zip', '2.0.1'
 depends 'sudo', '= 5.4.4'
-depends 'windows', '< 5.0'
+depends 'windows', '4.3.4'
 depends 'yarn'
 
 supports 'amazon', '>= 2017.03'
