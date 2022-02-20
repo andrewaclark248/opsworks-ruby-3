@@ -6,6 +6,6 @@ description      'Installs/Configures 7-Zip'
 version          '2.0.0'
 source_url       'https://github.com/sous-chefs/seven_zip'
 issues_url       'https://github.com/sous-chefs/seven_zip/issues'
-chef_version     '>= 15.3'
+chef_version     '>= 12.0'
 
 supports         'windows'
