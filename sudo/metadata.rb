@@ -11,4 +11,4 @@ end
 
 source_url 'https://github.com/chef-cookbooks/sudo'
 issues_url 'https://github.com/chef-cookbooks/sudo/issues'
-chef_version '>= 12.21.3'
+chef_version '>= 12.0'
