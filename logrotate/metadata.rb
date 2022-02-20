@@ -6,7 +6,7 @@ description       'Installs logrotate package and provides a resource for managi
 version           '3.0.8'
 source_url        'https://github.com/sous-chefs/logrotate'
 issues_url        'https://github.com/sous-chefs/logrotate/issues'
-chef_version      '>= 15.3'
+chef_version      '>= 12.0'
 
 supports 'amazon'
 supports 'centos'
