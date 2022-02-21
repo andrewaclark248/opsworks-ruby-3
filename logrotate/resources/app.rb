@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-unified_mode true
+#unified_mode true
 
 include ::Logrotate::Cookbook::LogrotateHelpers
 
