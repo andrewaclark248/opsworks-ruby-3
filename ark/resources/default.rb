@@ -46,7 +46,7 @@ property :autoconf_opts, Array, default: []
 property :extension, String
 property :backup, [FalseClass, Integer], default: 5
 
-unified_mode true
+#unified_mode true
 
 #################
 # action :install
