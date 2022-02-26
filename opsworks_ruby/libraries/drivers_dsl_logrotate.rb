@@ -33,7 +33,7 @@ module Drivers
 
       def remove_default_conf
         context.logrotate_app adapter do
-          enable false # option that will soon be deprecated
+          #enable false # option that will soon be deprecated
           action :disable # new option but not working as of this version
         end
       end
