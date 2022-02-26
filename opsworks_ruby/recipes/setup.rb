@@ -9,15 +9,15 @@ include_recipe 'apt'
 
 prepare_recipe
 
-if node['patches']['chef12_ssl_fix']
-  remote_file 'Copy more recent root certificate into Chef' do
-    path '/opt/chef/embedded/ssl/certs/cacert.pem'
-    source 'file:///etc/ssl/certs/ca-certificates.crt'
-    owner 'root'
-    group 'root'
-    mode '0644'
-  end
-end
+#if node['patches']['chef12_ssl_fix']
+#  remote_file 'Copy more recent root certificate into Chef' do
+#    path '/opt/chef/embedded/ssl/certs/cacert.pem'
+#    source 'file:///etc/ssl/certs/ca-certificates.crt'
+#    owner 'root'
+#    group 'root'
+#    mode '0644'
+#  end
+#end
 
 # Upgrade chef
 # Taken from `chef-upgrade` cookbook <https://github.com/inopinatus/chef-upgrade> by Josh Goodall
