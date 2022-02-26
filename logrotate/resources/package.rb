@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-unified_mode true
+#unified_mode true
 
 property :packages, [String, Array],
           default: 'logrotate'
