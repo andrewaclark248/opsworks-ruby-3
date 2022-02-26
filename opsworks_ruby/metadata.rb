@@ -13,7 +13,6 @@ depends 'apt', '7.0.0'
 depends 'ark', '4.0.0'
 depends 'chef_client_updater', '3.6.0' # 3.7 introduces breaking change
 depends 'logrotate', '3.0.8' # 2.2.2 breaks tests for whatever reason
-depends 'yum-nginx', '~> 0.1.0'
 depends 'nodejs', '6.0.0'
 depends 'ohai', '5.2.5'
 depends 'ruby-ng'
