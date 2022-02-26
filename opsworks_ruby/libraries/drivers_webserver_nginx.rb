@@ -29,10 +29,11 @@ module Drivers
       def setup
         #node.default['nginx']['install_method'] = out[:build_type].to_s == 'source' ? 'source' : 'package'
         #recipe = out[:build_type].to_s == 'source' ? 'source' : 'default'
-        #context.include_recipe("nginx::#{recipe}")
-        nginx_install 'repo' do
-          default_site_enabled true
-        end
+        context.include_recipe("yum-nginx::default")
+
+        #nginx_install 'repo' do
+        #  default_site_enabled true
+        #end
 
         define_service(:start)
       end
