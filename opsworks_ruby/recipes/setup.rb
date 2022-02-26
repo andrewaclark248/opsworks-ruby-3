@@ -155,10 +155,13 @@ else
       to '/usr/bin/bundle'
     end
   else
-    ruby_pkg_version = node['ruby-version'].split('.')[0..1]
-    package "ruby#{ruby_pkg_version.join}"
-    package "ruby#{ruby_pkg_version.join}-devel"
-    execute "/usr/sbin/alternatives --set ruby /usr/bin/ruby#{ruby_pkg_version.join('.')}"
+    #ruby_pkg_version = node['ruby-version'].split('.')[0..1]
+    #package "ruby#{ruby_pkg_version.join}"
+    #package "ruby#{ruby_pkg_version.join}-devel"
+    #execute "/usr/sbin/alternatives --set ruby /usr/bin/ruby#{ruby_pkg_version.join('.')}"
+
+    execute "amazon-linux-extras install ruby#{node['ruby-version']}"
+    execute "yum install -y ruby-devel"
 
     link '/usr/local/bin/bundle' do
       to '/usr/local/bin/bundler'
