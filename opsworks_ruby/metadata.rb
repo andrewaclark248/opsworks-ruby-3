@@ -22,6 +22,7 @@ depends 'seven_zip', '2.0.0'
 depends 'sudo', '= 5.4.4'
 depends 'windows', '4.3.4'
 depends 'yarn'
+depends 'nginx_conf', '2.0.0'
 
 supports 'amazon', '>= 2017.03'
 supports 'ubuntu', '>= 16.04'
