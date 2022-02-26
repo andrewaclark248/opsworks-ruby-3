@@ -19,9 +19,9 @@
 
 include Nginx::Cookbook::Helpers
 
-deprecated_property_alias 'user',
-                          'process_user',
-                          'The user property was renamed process_user in the 11.3 release of this cookbook. Please update your cookbooks to use the new property name. This alias will be removed in the next major version.'
+#deprecated_property_alias 'user',
+#                          'process_user',
+#                          'The user property was renamed process_user in the 11.3 release of this cookbook. Please update your cookbooks to use the new property name. This alias will be removed in the next major version.'
 
 property :config_file, String,
           description: 'The full path to the Nginx server configuration on disk.',
