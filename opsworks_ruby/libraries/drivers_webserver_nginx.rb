@@ -29,7 +29,7 @@ module Drivers
       def setup
         #node.default['nginx']['install_method'] = out[:build_type].to_s == 'source' ? 'source' : 'package'
         #recipe = out[:build_type].to_s == 'source' ? 'source' : 'default'
-        context.include_recipe("nginx_conf::default")
+        context.include_recipe("nginx::default")
 
         #nginx_install 'repo' do
         #  default_site_enabled true
