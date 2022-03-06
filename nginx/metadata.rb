@@ -12,7 +12,7 @@ depends 'apt',             '7.0.0'
 depends 'bluepill',        '4.1.1'
 depends 'build-essential', '8.2.1'
 depends 'ohai',            '5.2.5'
-depends 'runit',           '5.1.6'
+depends 'runit',           '1.7.0'
 depends 'yum',             '7.3.2'
 depends 'yum-epel'
 
