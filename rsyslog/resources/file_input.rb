@@ -1,7 +1,7 @@
-# Cookbook:: rsyslog
+# Cookbook Name:: rsyslog
 # Resource:: file_input
 #
-# Copyright:: 2012-2017, Joseph Holsten
+# Copyright 2012-2015, Joseph Holsten
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,32 +15,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-property :file, String, required: true
-property :priority, Integer, default: 99
-property :severity, String
-property :facility, String
-property :input_parameters, Hash, default: {}
-property :cookbook_source, String, default: 'rsyslog'
-property :template_source, String, default: lazy { labeled_template('file-input.conf.erb', node['rsyslog']['config_style']) }
 
-unified_mode true
+actions :create
+default_action :create
 
-action :create do
-  vars = {
-    file_name: new_resource.file,
-    tag: new_resource.name,
-    severity: new_resource.severity,
-    facility: new_resource.facility,
-    input_parameters: new_resource.input_parameters,
-  }
-  vars['state_file'] = new_resource.name if node['rsyslog']['config_style'] == 'legacy'
-  template "/etc/rsyslog.d/#{new_resource.priority}-#{new_resource.name}.conf" do
-    mode '0664'
-    owner node['rsyslog']['user']
-    group node['rsyslog']['group']
-    source new_resource.template_source
-    cookbook new_resource.cookbook_source
-    variables vars
-    notifies :create, "template[#{node['rsyslog']['config_prefix']}/rsyslog.d/35-imfile.conf]", :before
-  end
-end
+attribute :name, :kind_of => String, :name_attribute => true, :required => true
+attribute :file, :kind_of => String, :required => true
+attribute :priority, :kind_of => Integer, :default => 99
+attribute :severity, :kind_of => String
+attribute :facility, :kind_of => String
+attribute :cookbook, :kind_of => String, :default => 'rsyslog'
+attribute :source, :kind_of => String, :default => 'file-input.conf.erb'

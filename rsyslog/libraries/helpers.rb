@@ -1,22 +1,18 @@
-module Rsyslog
-  module Cookbook
-    module Helpers
-      def rsyslog_relp_package
-        if platform_family?('suse')
-          'rsyslog-module-relp'
-        else
-          'rsyslog-relp'
-        end
+module RsyslogCookbook
+  # helpers for the various service providers on Ubuntu systems
+  module Helpers
+    def declare_rsyslog_service
+      if node['platform'] == 'ubuntu' && node['platform_version'].to_f >= 12.04
+        service_provider = Chef::Provider::Service::Upstart
+      else
+        service_provider = nil
       end
 
-      # If `config_style` for the node is `legacy`, add a `-legacy` label prior
-      # to the final file suffix of an ERB template.
-      def labeled_template(path, style)
-        path.gsub(/^(.*)(\.conf\.erb)/, "\\1#{style == 'legacy' ? '-legacy' : ''}\\2")
+      service node['rsyslog']['service_name'] do
+        supports :restart => true, :status => true
+        action   [:enable, :start]
+        provider service_provider
       end
     end
   end
 end
-
-Chef::DSL::Recipe.include Rsyslog::Cookbook::Helpers
-Chef::Resource.include Rsyslog::Cookbook::Helpers

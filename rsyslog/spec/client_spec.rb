@@ -1,15 +1,24 @@
 require 'spec_helper'
 
 describe 'rsyslog::client' do
-  cached(:chef_run) do
-    ChefSpec::ServerRunner.new(platform: 'ubuntu') do |node|
-      node.normal['rsyslog']['server_ip'] = server_ip
-      node.normal['rsyslog']['custom_remote'] = custom_remote
+  context "when node['rsyslog']['server_ip'] is not set" do
+    before do
+      allow(Chef::Log).to receive(:fatal)
+      allow($stdout).to receive(:puts)
+    end
+
+    it 'exits fatally' do
+      expect { ChefSpec::SoloRunner.new.converge(described_recipe) }.to raise_error(SystemExit)
+    end
+  end
+
+  let(:chef_run) do
+    ChefSpec::SoloRunner.new(platform: 'ubuntu', version: '12.04') do |node|
+      node.set['rsyslog']['server_ip'] = server_ip
     end.converge(described_recipe)
   end
 
-  cached(:server_ip) { "10.#{rand(1..9)}.#{rand(1..9)}.50" }
-  let(:custom_remote) { [{ 'server' => '10.0.0.1', 'port' => 555, 'protocol' => 'tcp', 'logs' => 'auth.*,mail.*', 'remote_template' => 'RSYSLOG_SyslogProtocol23Format' }] }
+  let(:server_ip) { "10.#{rand(1..9)}.#{rand(1..9)}.50" }
   let(:service_resource) { 'service[rsyslog]' }
 
   it 'includes the default recipe' do
@@ -20,10 +29,7 @@ describe 'rsyslog::client' do
     let(:template) { chef_run.template('/etc/rsyslog.d/49-remote.conf') }
 
     it 'creates the template' do
-      expect(chef_run).to render_file(template.path).with_content { |content|
-        expect(content).to include("*.* @@#{server_ip}:514")
-        expect(content).to include("#{custom_remote.first['logs']} @@#{custom_remote.first['server']}:#{custom_remote.first['port']};#{custom_remote.first['remote_template']}")
-      }
+      expect(chef_run).to render_file(template.path).with_content("*.* @@#{server_ip}:514")
     end
 
     it 'is owned by root:root' do
@@ -40,20 +46,16 @@ describe 'rsyslog::client' do
     end
 
     context 'on SmartOS' do
-      cached(:chef_run) do
-        ChefSpec::ServerRunner.new(platform: 'smartos') do |node|
-          node.normal['rsyslog']['server_ip'] = server_ip
-          node.normal['rsyslog']['custom_remote'] = custom_remote
+      let(:chef_run) do
+        ChefSpec::SoloRunner.new(platform: 'smartos', version: 'joyent_20130111T180733Z') do |node|
+          node.set['rsyslog']['server_ip'] = server_ip
         end.converge(described_recipe)
       end
 
       let(:template) { chef_run.template('/opt/local/etc/rsyslog.d/49-remote.conf') }
 
       it 'creates the template' do
-        expect(chef_run).to render_file(template.path).with_content { |content|
-          expect(content).to include("*.* @@#{server_ip}:514")
-          expect(content).to include("#{custom_remote.first['logs']} @@#{custom_remote.first['server']}:#{custom_remote.first['port']};#{custom_remote.first['remote_template']}")
-        }
+        expect(chef_run).to render_file(template.path).with_content("*.* @@#{server_ip}:514")
       end
 
       it 'is owned by root:root' do
@@ -83,9 +85,9 @@ describe 'rsyslog::client' do
     end
 
     context 'on SmartOS' do
-      cached(:chef_run) do
-        ChefSpec::ServerRunner.new(platform: 'smartos') do |node|
-          node.normal['rsyslog']['server_ip'] = server_ip
+      let(:chef_run) do
+        ChefSpec::SoloRunner.new(platform: 'smartos', version: 'joyent_20130111T180733Z') do |node|
+          node.set['rsyslog']['server_ip'] = server_ip
         end.converge(described_recipe)
       end
 
