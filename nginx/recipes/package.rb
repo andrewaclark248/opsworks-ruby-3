@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-include_recipe 'nginx::ohai_plugin'
+#include_recipe 'nginx::ohai_plugin'
 
 if platform_family?('rhel')
   if node['nginx']['repo_source'] == 'epel'
