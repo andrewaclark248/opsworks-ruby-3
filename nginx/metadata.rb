@@ -9,7 +9,7 @@ recipe 'nginx',         'Installs nginx package and sets up configuration with D
 recipe 'nginx::source', 'Installs nginx from source and sets up configuration with Debian apache style with sites-enabled/sites-available'
 
 depends 'apt',             '7.0.0'
-depends 'bluepill',        '~> 2.3'
+depends 'bluepill',        '4.1.1'
 depends 'build-essential', '8.2.1'
 depends 'ohai',            '5.2.5'
 depends 'runit',           '~> 1.2'
