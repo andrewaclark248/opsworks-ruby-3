@@ -1,11 +1,41 @@
-# rubocop todo
-#
+AlignParameters:
+  Enabled: false
 
-Metrics/BlockNesting:
-  Max: 4
+Encoding:
+  Enabled: false
 
-# Configuration parameters: MinBodyLength.
-Style/GuardClause:
+ClassLength:
+  Enabled: false
+
+MethodLength:
+  Enabled: false
+
+LineLength:
+  Enabled: false
+
+# HashSyntax:
+#  EnforcedStyle: hash_rockets
+
+Documentation:
+  Enabled: false
+
+PerceivedComplexity:
+  Enabled: false
+
+CyclomaticComplexity:
+  Enabled: false
+
+Style/FileName:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+AllCops:
   Exclude:
-    - 'libraries/helpers.rb'
-    - 'libraries/resource_runit_service.rb'
+    - 'Guardfile'
+    - 'tmp/**/*'
+    - 'cookbooks/**/*'
+
+Style/GuardClause:
+  Enabled: false

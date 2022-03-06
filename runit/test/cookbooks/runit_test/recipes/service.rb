@@ -1,8 +1,8 @@
 #
-# Cookbook:: runit_test
+# Cookbook Name:: runit_test
 # Recipe:: service
 #
-# Copyright:: 2012-2019, Chef Software, Inc.
+# Copyright 2012, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,13 +20,18 @@
 include_recipe 'runit::default'
 
 link '/usr/local/bin/sv' do
-  to value_for_platform_family(
-    'default' => '/usr/bin/sv',
-    %w(rhel amazon) => '/sbin/sv'
-  )
+  to '/usr/bin/sv'
 end
 
-package %w(binutils file lsof socat)
+package 'socat'
+
+package 'netcat' do
+  package_name 'nc' if platform_family?('rhel', 'fedora')
+end
+
+package 'lsof' do
+  package_name 'lsof' if platform_family?('rhel', 'fedora')
+end
 
 # Create a normal user to run services later
 group 'floyd'
@@ -37,6 +42,7 @@ user 'floyd' do
   shell '/bin/bash'
   home '/home/floyd'
   manage_home true
+  supports manage_home: true
 end
 
 %w(sv service).each do |dir|
@@ -45,20 +51,6 @@ end
     group 'floyd'
     recursive true
   end
-end
-
-# drop off environment files outside of the runit_service resources
-# so we can test manage_env_dir behavior
-%w(plain-defaults env-files).each do |svc|
-  directory "/etc/sv/#{svc}/env" do
-    recursive true
-    action :nothing
-  end.run_action(:create)
-
-  file "/etc/sv/#{svc}/env/ZAP_TEST" do
-    content '1'
-    action :nothing
-  end.run_action(:create)
 end
 
 # Create a service with all the fixin's
@@ -72,7 +64,7 @@ end
 # Create a service that uses the default svlog
 runit_service 'default-svlog' do
   default_logger true
-  log_size 10_000 # smallish 10k
+  log_size 10000 # smallish 10k
   log_num 12
   log_processor 'gzip'
 end
@@ -129,43 +121,41 @@ runit_service 'yerba' do
   log_template_name 'yerba-matte'
   check_script_template_name 'yerba-matte'
   finish_script_template_name 'yerba-matte'
-  log_dir '/var/log/yerba-matte'
 end
 
-# Create a service with differently named template file, using default logger with non-default log_dir
+
+# Create a service with differently named template file, using default logger
 runit_service 'yerba-alt' do
   run_template_name 'calabash'
   default_logger true
-  log_dir '/var/log/yerba/matte/'
 end
 
 # Create a service with a template sourced from another cookbook
 runit_service 'ayahuasca' do
   run_template_name 'ayahuasca'
   default_logger true
-  log_dir '/opt/ayahuasca/log'
   cookbook 'runit_other_test'
 end
 
-# Create a service with different svlogd flags
-runit_service 'ayahuasca' do
-  default_logger true
-  log_flags '-t'
-  cookbook 'runit_other_test'
-end
+# Note: this won't update the run script for the above due to
+# http://tickets.chef.io/browse/COOK-2353
+# runit_service 'the other name for yerba-alt' do
+#   service_name 'yerba-alt'
+#   default_logger true
+# end
 
 runit_service 'exist-disabled' do
   action [:create, :disable]
 end
 
-unless platform_family?('rhel', 'fedora', 'amazon')
-  # Create a service that has a package with its own service directory
-  package 'git-daemon-run'
+# unless platform_family?('rhel', 'fedora')
+#   # Create a service that has a package with its own service directory
+#   package 'git-daemon-run'
 
-  runit_service 'git-daemon' do
-    sv_templates false
-  end
-end
+#   runit_service 'git-daemon' do
+#     sv_templates false
+#   end
+# end
 
 # Despite waiting for runit to create supervise/ok, sometimes services
 # are supervised, but not actually fully started
@@ -186,67 +176,44 @@ file '/tmp/notifier-2' do
   notifies :restart, 'runit_service[plain-defaults]', :immediately
 end
 
+# # Test for COOK-2867
+# link '/etc/init.d/cook-2867' do
+#   to '/usr/bin/sv'
+# end
+
+# runit_service 'cook-2867' do
+#   default_logger true
+# end
+
+
 # create a service using an alternate sv binary
 runit_service 'alternative-sv-bin' do
   sv_bin '/usr/local/bin/sv'
 end
 
-runit_service 'downed-service-6702' do
+runit_service "downed-service-6702" do
   start_down true
 end
 
-runit_service 'un-downed-service' do
+runit_service "un-downed-service" do
   start_down true
 end
 
-runit_service 'un-downed-service remove down' do
+runit_service "un-downed-service remove down" do
   service_name 'un-downed-service'
   log_template_name 'un-downed-service'
   run_template_name 'un-downed-service'
   start_down false
 end
 
-runit_service 'un-downed-service-deleted' do
+runit_service "un-downed-service-deleted" do
   start_down true
 end
 
-runit_service 'supervisor_owner' do
-  supervisor_owner 'floyd'
-  default_logger true
-end
-
-runit_service 'supervisor_group' do
-  supervisor_group 'floyd'
-  default_logger true
-end
-
-runit_service 'supervisor_owner_and_group' do
-  supervisor_owner 'floyd'
-  supervisor_group 'floyd'
-  default_logger true
-end
-
-runit_service 'un-downed-service-deleted remove down' do
+runit_service "un-downed-service-deleted remove down" do
   service_name 'un-downed-service-deleted'
   log_template_name 'un-downed-service-deleted'
   run_template_name 'un-downed-service-deleted'
   start_down false
   delete_downfile true
-end
-
-# Use a service with all the fixin's to ensure all actions are
-# available and working
-
-actions = (runit_service('plain-defaults').allowed_actions - [:enable, :disable, :mask, :unmask]) + [:disable, :enable]
-
-actions.each do |test_action|
-  runit_service 'plain-defaults' do
-    action test_action
-  end
-end
-
-# Try to stop a service that doesn't exist, just to make sure this doesn't
-# fail with an exception
-runit_service 'non-existent stopper' do
-  action :stop
 end
