@@ -32,13 +32,13 @@ module Drivers
         deploy_to = deploy_dir(app)
         env = environment.merge('HOME' => node['deployer']['home'])
 
-        context.execute 'assets:precompile' do
-          command output[:assets_precompilation_command]
-          user node['deployer']['user']
-          cwd File.join(deploy_to, 'current')
-          group www_group
-          environment env
-        end
+        #context.execute 'assets:precompile' do
+        #  command output[:assets_precompilation_command]
+        #  user node['deployer']['user']
+        #  cwd File.join(deploy_to, 'current')
+        #  group www_group
+        #  environment env
+        #end
       end
 
       def database_url
