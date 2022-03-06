@@ -36,9 +36,9 @@ elsif platform_family?('debian')
   include_recipe 'nginx::repo' if node['nginx']['repo_source'] == 'nginx'
 end
 
-package node['nginx']['package_name'] do
-  notifies :reload, 'ohai[reload_nginx]', :immediately
-end
+#package node['nginx']['package_name'] do
+#  notifies :reload, 'ohai[reload_nginx]', :immediately
+#end
 
 service 'nginx' do
   supports :status => true, :restart => true, :reload => true
