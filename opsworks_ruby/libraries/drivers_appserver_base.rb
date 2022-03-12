@@ -67,7 +67,7 @@ module Drivers
       def restart_monit
         return if ENV['TEST_KITCHEN'] # Don't like it, but we can't run multiple processes in Docker on travis
 
-        context.execute "monit restart #{adapter}_#{app['shortname']}" do
+        context.execute "monit start #{adapter}_#{app['shortname']}" do
           retries 3
         end
       end
